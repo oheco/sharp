@@ -17,3 +17,5 @@ package-lock.json
 docs/dist
 release-notes.md
 dist
+/out/
+__pycache__/

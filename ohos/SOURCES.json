@@ -1,0 +1,69 @@
+{
+  "upstream": {
+    "repository": "https://github.com/lovell/sharp",
+    "version": "0.35.3",
+    "commit": "1018449164723ba0203c1beffaba0e21f7829c18"
+  },
+  "dependencies": [
+    {
+      "name": "@img/sharp-wasm32",
+      "version": "0.35.3",
+      "url": "https://registry.npmjs.org/@img/sharp-wasm32/-/sharp-wasm32-0.35.3.tgz",
+      "sha256": "fcab5cbbbf24ce63840c273e2da0214147f68e478bfa899b1a06db6d65eb86e0",
+      "integrity": "sha512-cZ0XkcYGpHZkqW6iCkqTcmUC0CD9DhD5d/qeZlZkfRBn6GnHniZXLUo5+9xw8Iv76YE6LQFN9YNBlKREcCG76w==",
+      "license": "Apache-2.0 AND LGPL-3.0-or-later AND MIT",
+      "archive": "tpr/npm/img-sharp-wasm32-0.35.3.tgz",
+      "modifications": "none"
+    },
+    {
+      "name": "@img/colour",
+      "version": "1.1.0",
+      "url": "https://registry.npmjs.org/@img/colour/-/colour-1.1.0.tgz",
+      "sha256": "6c2df3ac33d4b8647191ad8942a579e6004be00c25846677eab85f04702d85b1",
+      "integrity": "sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==",
+      "license": "MIT",
+      "archive": "tpr/npm/img-colour-1.1.0.tgz",
+      "modifications": "none"
+    },
+    {
+      "name": "@emnapi/runtime",
+      "version": "1.11.3",
+      "url": "https://registry.npmjs.org/@emnapi/runtime/-/runtime-1.11.3.tgz",
+      "sha256": "e6eb8913a08b551436d65f9a5cfbdcc8006f58e6798226d24e695c25679b5e49",
+      "integrity": "sha512-Xz4Tpyki7XyrpbUK1jR1AhdAdaXyhhY4lZ3neLodmhpuWfy2PAQN5B46sAiU4liOXGLkHypn/qU+jvfWSCYYLA==",
+      "license": "MIT",
+      "archive": "tpr/npm/emnapi-runtime-1.11.3.tgz",
+      "modifications": "none"
+    },
+    {
+      "name": "tslib",
+      "version": "2.8.1",
+      "url": "https://registry.npmjs.org/tslib/-/tslib-2.8.1.tgz",
+      "sha256": "66f635d5eeabae44807534976913a102cf615b9a045368359c9f79ae6ee2119e",
+      "integrity": "sha512-oJFu94HQb+KVduSUQL7wnpmqnfmLsOA/nAh6b6EH0wCEoK0/mPeXU6c3wKDV83MkOuHPRHtSXKKU99IBazS/2w==",
+      "license": "0BSD",
+      "archive": "tpr/npm/tslib-2.8.1.tgz",
+      "modifications": "none"
+    },
+    {
+      "name": "detect-libc",
+      "version": "2.1.2",
+      "url": "https://registry.npmjs.org/detect-libc/-/detect-libc-2.1.2.tgz",
+      "sha256": "270dec0fc06cff86481da8af2dd8f18dee6b602790b14ef0e1c2c18d7da39427",
+      "integrity": "sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==",
+      "license": "Apache-2.0",
+      "archive": "tpr/npm/detect-libc-2.1.2.tgz",
+      "modifications": "none"
+    },
+    {
+      "name": "semver",
+      "version": "7.8.5",
+      "url": "https://registry.npmjs.org/semver/-/semver-7.8.5.tgz",
+      "sha256": "d85045d4300d7d57c891336b95df532e73f34c22ffcd222452b6d08b9d127d5d",
+      "integrity": "sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==",
+      "license": "ISC",
+      "archive": "tpr/npm/semver-7.8.5.tgz",
+      "modifications": "none"
+    }
+  ]
+}

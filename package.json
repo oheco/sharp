@@ -1,7 +1,7 @@
 {
   "name": "sharp",
   "description": "High performance Node.js image processing, the fastest module to resize JPEG, PNG, WebP, GIF, AVIF and TIFF images",
-  "version": "0.35.3",
+  "version": "0.35.3-ohos.1",
   "author": "Lovell Fuller <npm@lovell.info>",
   "homepage": "https://sharp.pixelplumbing.com",
   "contributors": [
@@ -137,7 +137,7 @@
   "sideEffects": true,
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/lovell/sharp.git"
+    "url": "git+https://github.com/oheco/sharp.git"
   },
   "keywords": [
     "jpeg",
@@ -187,7 +187,8 @@
     "@img/sharp-webcontainers-wasm32": "0.35.3",
     "@img/sharp-win32-arm64": "0.35.3",
     "@img/sharp-win32-ia32": "0.35.3",
-    "@img/sharp-win32-x64": "0.35.3"
+    "@img/sharp-win32-x64": "0.35.3",
+    "@img/sharp-wasm32": "0.35.3"
   },
   "peerDependenciesMeta": {
     "@types/node": {

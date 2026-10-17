@@ -11,8 +11,8 @@ const sharp = require(root);
 test('HarmonyOS ARM64 and exact upstream/runtime versions', () => {
   assert.equal(process.platform, 'openharmony');
   assert.equal(process.arch, 'arm64');
-  assert.equal(require(path.join(root, 'package.json')).version, '0.35.5-ohos.1');
-  assert.equal(sharp.versions.sharp, '0.35.5-ohos.1');
+  assert.equal(require(path.join(root, 'package.json')).version, '0.35.5-ohos.2');
+  assert.equal(sharp.versions.sharp, '0.35.5-ohos.2');
   assert.equal(sharp.versions.vips, '8.18.7');
   assert.equal(require(path.join(root, 'node_modules/@img/sharp-wasm32/package.json')).version, '0.35.5');
 });

@@ -9,6 +9,7 @@ import json
 import os
 from pathlib import Path
 import shutil
+import signal
 import subprocess
 import tarfile
 import tempfile
@@ -26,14 +27,26 @@ env = dict(os.environ, npm_config_offline='true', HTTP_PROXY='http://127.0.0.1:9
 def run(command, name, cwd=root, check=True, input_text=None):
     print('+', ' '.join(map(str, command)), flush=True)
     with (output / f'{name}.log').open('w') as log:
-        result = subprocess.run(list(map(str, command)), cwd=cwd, env=env, input=input_text, text=True, stdin=subprocess.DEVNULL if input_text is None else None, stdout=log, stderr=subprocess.STDOUT, timeout=600 if name.startswith('upstream-') else None)
+        result = subprocess.Popen(list(map(str, command)), cwd=cwd, env=env, text=True,
+                                  stdin=subprocess.DEVNULL if input_text is None else subprocess.PIPE,
+                                  stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+        try:
+            result.communicate(input=input_text, timeout=600 if name.startswith('upstream-') else None)
+        except subprocess.TimeoutExpired:
+            # Node --test owns a child process: kill the owned group, not only its runner.
+            try:
+                os.killpg(result.pid, signal.SIGKILL)
+            except ProcessLookupError:
+                pass
+            result.communicate()
+            raise RuntimeError(f'{name} timed out; owned process group killed and runner reaped') from None
     if check and result.returncode:
         raise RuntimeError(f'{name} failed ({result.returncode}); see {output / (name + ".log")}')
     return result.returncode
 
 
-for name in ['build.py', 'verify.py']:
-    ast.parse((root / 'ohos' / name).read_text(), filename=name)
+for script in sorted((root / 'ohos').glob('*.py')):
+    ast.parse(script.read_text(), filename=str(script))
 run(['git', 'diff', '--check'], 'diff-check')
 builds = args.reuse_builds.resolve() if args.reuse_builds else output
 if not args.reuse_builds:
@@ -41,11 +54,13 @@ if not args.reuse_builds:
         return run(['python3', root / 'ohos/build.py', '--output', builds / name], name)
     with ThreadPoolExecutor(max_workers=2) as workers:
         list(workers.map(build, ['build-1', 'build-2']))
-archive_name = 'sharp-0.35.5-ohos.1.tgz'
+archive_name = 'sharp-' + json.loads((root / 'package.json').read_text())['version'] + '.tgz'
 archive = builds / 'build-1' / archive_name
 assert archive.read_bytes() == (builds / 'build-2' / archive_name).read_bytes(), 'non-reproducible package'
 for file in [root / 'ohos/test.cjs', *(builds / 'build-1/package/dist').glob('*.cjs'), *(builds / 'build-1/package/dist').glob('*.mjs')]:
     run(['node', '--check', file], 'syntax-' + file.name)
+run(['python3', '-B', root / 'ohos/test-wasm-stdio.py'], 'loader-patch-regression')
+run(['python3', '-B', root / 'ohos/test-stdio.py', '--package', builds / 'build-1/package', '--output', output / 'stdio-matrix'], 'stdio-matrix')
 run(['node', root / 'ohos/test.cjs', builds / 'build-1/package'], 'native-direct')
 eval_code = "const assert=require('node:assert/strict'); const sharp=require(process.argv[1]); sharp({create:{width:4,height:3,channels:3,background:'red'}}).png().toBuffer().then(async b=>assert.equal((await sharp(b).metadata()).height,3)).catch(e=>{console.error(e);process.exitCode=1});"
 run(['node', '-e', eval_code, builds / 'build-1/package'], 'native-eval')
@@ -88,11 +103,10 @@ try:
                 with tar.extractfile(member) as source, dest.open('wb') as out:
                     shutil.copyfileobj(source, out)
     tests = sorted((upstream / 'test/unit').glob('*'))
-    # HarmonyOS Node's --test isolation children expose invalid stdio FDs to
-    # Emscripten NODERAWFS. Keep real file descriptors and process isolation by
-    # launching every test file directly from Python instead.
+    # Keep Node's normal isolated test children, including their real socket
+    # standard streams, so the suite exercises the runtime initialization fix.
     def upstream_test(file):
-        code = run(['node', '--test-reporter=tap', file], 'upstream-' + file.name, cwd=upstream, check=False)
+        code = run(['node', '--test', '--test-reporter=tap', file], 'upstream-' + file.name, cwd=upstream, check=False)
         text = (output / ('upstream-' + file.name + '.log')).read_text()
         counts = {key: sum(map(int, re.findall(r'^# ' + key + r' (\d+)$', text, re.M))) for key in ['tests', 'pass', 'fail', 'skipped', 'cancelled']}
         return {'file': file.name, 'exit_code': code, **counts}
@@ -108,6 +122,7 @@ try:
         'reproducible_builds': True,
         'native_direct': 'passed',
         'native_relocated': 'passed',
+        'stdio_matrix': json.loads((output / 'stdio-matrix/summary.json').read_text()),
         'upstream_unit_exit': result,
         'upstream_files': len(unit_results),
         'upstream_counts': {key: sum(item[key] for item in unit_results) for key in ['tests', 'pass', 'fail', 'skipped', 'cancelled']},

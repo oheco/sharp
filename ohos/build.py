@@ -9,6 +9,7 @@ from pathlib import Path
 import shutil
 import subprocess
 import tarfile
+from wasm_stdio import patch_loader
 
 root = Path(__file__).resolve().parent.parent
 parser = argparse.ArgumentParser(description=__doc__)
@@ -19,7 +20,7 @@ if subprocess.check_output(['git', 'status', '--porcelain'], cwd=root, text=True
 inputs = json.loads((root / 'ohos/SOURCES.json').read_text())
 manifest = json.loads((root / 'package.json').read_text())
 engine = inputs['dependencies'][0]
-if engine['version'] != inputs['upstream']['version'] or manifest['version'] != engine['version'] + '-ohos.1':
+if engine['version'] != inputs['upstream']['version'] or manifest['version'] != engine['version'] + f'-ohos.{inputs["port_revision"]}':
     raise ValueError('upstream, package and WASM engine versions must match')
 for group in ['dependencies', 'provenance', 'license_files', 'test_dependencies']:
     for entry in inputs.get(group, []):
@@ -81,6 +82,7 @@ for entry in inputs['dependencies']:
     for name in dependency.get('dependencies', {}):
         if name not in versions:
             raise ValueError(f'unbundled transitive dependency: {name}')
+runtime_patch = patch_loader(package, root)
 for field in ['scripts', 'devDependencies', 'optionalDependencies', 'files', 'peerDependenciesMeta']:
     manifest.pop(field, None)
 manifest.update(dependencies=versions, bundledDependencies=list(versions), os=['openharmony'], cpu=['arm64'])
@@ -103,7 +105,9 @@ host = json.loads(subprocess.check_output(['node', '-p', 'JSON.stringify({node:p
     'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=root, text=True).strip(),
     'upstream_commit': inputs['upstream']['commit'],
     **host,
-    'runtime': f'upstream @img/sharp-wasm32 {engine["version"]}, bundled without modification',
+    'runtime': f'upstream @img/sharp-wasm32 {engine["version"]}; WASM unchanged, standard-stream JS initialization adapted',
+    'runtime_patch': runtime_patch,
+    'wasm_sha256': hashlib.sha256(wasm_files[0].read_bytes()).hexdigest(),
     'signing': 'not applicable: JavaScript and WebAssembly only; no ELF binaries',
 }, indent=2) + '\n')
 archive = output / f'sharp-{manifest["version"]}.tgz'

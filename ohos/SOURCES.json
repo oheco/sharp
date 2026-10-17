@@ -4,6 +4,12 @@
     "version": "0.35.5",
     "commit": "51a990faa26ade5586a4934ac9673c98d8893326"
   },
+  "port_revision": 2,
+  "runtime_patch": {
+    "recipe": "ohos/wasm_stdio.py",
+    "helper": "ohos/standard-stream-node.cjs",
+    "scope": "one exact NODERAWFS createStandardStreams JavaScript fragment; WASM and pinned input archives remain unchanged"
+  },
   "dependencies": [
     {
       "name": "@img/sharp-wasm32",
@@ -13,7 +19,7 @@
       "integrity": "sha512-Ptsga1su4tQx+LLF1ECS9U6nz5kmrXKo6XVbtR48Ke3ZRxxgaWBu7IDtEe1quo8hiupwm6WFqxVlXaSf7IINGQ==",
       "license": "Apache-2.0 AND LGPL-3.0-or-later AND MIT",
       "archive": "tpr/npm/img-sharp-wasm32-0.35.5.tgz",
-      "modifications": "none"
+      "modifications": "pinned archive and WASM unchanged; build applies the recorded one-fragment JavaScript standard-stream initialization patch plus owner-local helper"
     },
     {
       "name": "@img/colour",

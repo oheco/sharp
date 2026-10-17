@@ -10,7 +10,7 @@ const sharp = require('../../');
 const { buildPlatformArch } = require('../../dist/libvips.cjs');
 
 // vips_cache_set_max_mem takes a size_t, so the 4096MB byte count overflows on 32-bit
-const is64bit = !['arm', 'ia32', 'wasm32'].includes(buildPlatformArch().split('-').pop());
+const is64bit = !sharp.versions.emscripten && !['arm', 'ia32', 'wasm32'].includes(buildPlatformArch().split('-').pop());
 
 suite('Utilities', () => {
   suite('Cache', () => {

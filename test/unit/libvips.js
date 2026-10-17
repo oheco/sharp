@@ -150,7 +150,7 @@ suite('libvips binaries', () => {
     test('platform', (t) => {
       t.plan(1);
       const [platform] = libvips.runtimePlatformArch().split('-');
-      t.assert.strictEqual(true, ['darwin', 'freebsd', 'linux', 'linuxmusl', 'win32'].includes(platform));
+      t.assert.strictEqual(true, ['darwin', 'freebsd', 'linux', 'linuxmusl', 'openharmony', 'win32'].includes(platform));
     });
     test('arch', (t) => {
       t.plan(1);

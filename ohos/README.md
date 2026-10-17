@@ -23,7 +23,9 @@ Run on HarmonyOS ARM64 with Node.js 24.21.0, Python 3, and `TMPDIR` pointing to 
 python3 ohos/verify.py --output "$XDG_CACHE_HOME/sharp-0.35.5/acceptance-1"
 ```
 
-This performs two fresh offline builds with deliberately unusable proxy endpoints, byte-for-byte archive comparison, Python parsing, JavaScript syntax checks, direct package acceptance, extraction into a new temporary path containing spaces, repeated acceptance, and the upstream unit suite with pinned test dependencies. Tests use isolated copies and clean their temporary directories. Logs and the summary remain in the specified cache output. No existing sharp installation or DSH process is modified.
+This performs two fresh offline builds without download calls and with deliberately unusable proxy endpoints, byte-for-byte archive comparison, Python parsing, JavaScript syntax checks, direct package acceptance, CJS/ESM eval and stdin entry points, extraction into a new temporary path containing spaces, repeated acceptance, and the upstream unit suite with pinned test dependencies. Tests use isolated copies and clean their temporary directories. Logs and the summary remain in the specified cache output. No existing sharp installation or DSH process is modified.
+
+On this HarmonyOS Node build, `node --test` isolation children can expose invalid standard file descriptors (`fs.fstatSync(0/1/2)` reports `EBADF`), which prevents Emscripten NODERAWFS initialization. The verifier therefore launches every upstream unit file as a separate ordinary Node process with real standard streams and a per-file timeout. The engine archive remains unmodified. Applications must provide valid stdin/stdout/stderr descriptors. The upstream test adaptations add HarmonyOS to the platform whitelist and use the loaded WASM engine to distinguish 32-bit memory and Buffer transfer behavior from native ARM64.
 
 The native acceptance tests cover exact versions and platform, CJS/ESM loading, Harness-style JPEG/PNG/WebP buffer resizing, raw RGBA pixels, real upstream fixtures and EXIF orientation, transparency, compositing, rotation/crop, concurrent pipelines, streams, filesystem/Unicode paths, missing files, invalid and truncated images, pixel limits and invalid parameters.
 
@@ -35,6 +37,6 @@ The release archive is an npm package with one top-level `package/` directory an
 node -e "require('sharp')({create:{width:8,height:8,channels:3,background:'red'}}).png().toBuffer().then(b=>console.log(b.length))"
 ```
 
-The software directory can install it into the current npm project with `oo install sharp` after the separate catalog update. This repository does not edit the catalog or Harness. Use explicit immutable GitHub release URLs and verify the published SHA256.
+The software directory can install it into the current npm project with `oo install sharp --` after the separate catalog update. This repository does not edit the catalog or Harness. Use explicit immutable GitHub release URLs and verify the published SHA256.
 
 WASM has upstream limitations, including its memory ceiling and lack of native text rendering. Performance and formats differ from native libvips. Query `sharp.format` for codec availability. Source recipes and licensing provenance do not imply that the upstream Emscripten toolchain or every codec was rebuilt on HarmonyOS. Native acceptance results apply to the tested host/runtime.

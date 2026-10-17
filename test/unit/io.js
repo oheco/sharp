@@ -13,7 +13,6 @@ const { isMarkedAsUntransferable } = require('node:worker_threads');
 
 const sharp = require('../../');
 const fixtures = require('../fixtures');
-const { buildPlatformArch } = require('../../dist/libvips.cjs');
 
 const outputJpg = fixtures.path('output.jpg');
 
@@ -1354,8 +1353,8 @@ suite('Input/output', () => {
       .resize({ width: 8, height: 8 })
       .toBuffer();
 
-    t.plan(isMarkedAsUntransferable && buildPlatformArch() !== 'wasm32' ? 3 : 2);
-    if (isMarkedAsUntransferable && buildPlatformArch() !== 'wasm32') {
+    t.plan(isMarkedAsUntransferable && !sharp.versions.emscripten ? 3 : 2);
+    if (isMarkedAsUntransferable && !sharp.versions.emscripten) {
       t.assert.strictEqual(isMarkedAsUntransferable(data.buffer), true);
     }
     t.assert.strictEqual(ArrayBuffer.isView(data), true);

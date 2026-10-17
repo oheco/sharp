@@ -52,7 +52,9 @@ test('Real upstream JPEG EXIF autoOrient, PNG transparency and WebP fixtures', a
   for (const [filename, format] of [['blackbug.png', 'png'], ['4.webp', 'webp']]) {
     const input = await fs.readFile(path.join(fixtures, filename));
     const output = await sharp(input).resize(48, 32, { fit: 'inside' }).toFormat(format).toBuffer();
-    assert.equal((await sharp(output).metadata()).format, format);
+    const metadata = await sharp(output).metadata();
+    assert.equal(metadata.format, format);
+    if (format === 'png') assert.equal(metadata.hasAlpha, true);
   }
 });
 
@@ -63,8 +65,17 @@ test('Rotation, crop, compositing and alpha pixels', async () => {
   assert.equal(info.channels, 4);
   assert.deepEqual([...data.subarray(0, 4)], [0, 255, 0, 255]);
   assert.deepEqual([...data.subarray(4 * 7, 4 * 8)], [255, 0, 0, 255]);
-  const rotated = await sharp(data, { raw: info }).rotate(90).extract({ left: 0, top: 0, width: 3, height: 4 }).png().toBuffer();
-  assert.equal((await sharp(rotated).metadata()).height, 4);
+  const rotated = await sharp(data, { raw: info }).rotate(90).raw().toBuffer({ resolveWithObject: true });
+  assert.equal(rotated.info.width, 6);
+  assert.equal(rotated.info.height, 8);
+  assert.deepEqual([...rotated.data.subarray(0, 4)], [255, 0, 0, 255]);
+  assert.deepEqual([...rotated.data.subarray(4 * 4, 4 * 5)], [0, 255, 0, 255]);
+  const cropped = await sharp(rotated.data, { raw: rotated.info }).extract({ left: 4, top: 0, width: 2, height: 2 }).raw().toBuffer();
+  for (let i = 0; i < cropped.length; i += 4) assert.deepEqual([...cropped.subarray(i, i + 4)], [0, 255, 0, 255]);
+  const alpha = await sharp({ create: { width: 2, height: 2, channels: 4, background: { r: 10, g: 20, b: 30, alpha: 0.5 } } }).png().toBuffer();
+  assert.equal((await sharp(alpha).metadata()).hasAlpha, true);
+  const pixels = await sharp(alpha).raw().toBuffer();
+  assert.deepEqual([...pixels.subarray(0, 4)], [10, 20, 30, 128]);
 });
 
 test('Concurrent pipelines and stream input/output', async () => {

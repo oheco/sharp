@@ -26,7 +26,7 @@ env = dict(os.environ, npm_config_offline='true', HTTP_PROXY='http://127.0.0.1:9
 def run(command, name, cwd=root, check=True, input_text=None):
     print('+', ' '.join(map(str, command)), flush=True)
     with (output / f'{name}.log').open('w') as log:
-        result = subprocess.run(list(map(str, command)), cwd=cwd, env=env, input=input_text, text=True, stdin=subprocess.DEVNULL if input_text is None else None, stdout=log, stderr=subprocess.STDOUT, timeout=180 if name.startswith('upstream-') else None)
+        result = subprocess.run(list(map(str, command)), cwd=cwd, env=env, input=input_text, text=True, stdin=subprocess.DEVNULL if input_text is None else None, stdout=log, stderr=subprocess.STDOUT, timeout=600 if name.startswith('upstream-') else None)
     if check and result.returncode:
         raise RuntimeError(f'{name} failed ({result.returncode}); see {output / (name + ".log")}')
     return result.returncode

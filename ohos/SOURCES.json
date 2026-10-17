@@ -1,18 +1,18 @@
 {
   "upstream": {
     "repository": "https://github.com/lovell/sharp",
-    "version": "0.35.3",
-    "commit": "1018449164723ba0203c1beffaba0e21f7829c18"
+    "version": "0.35.5",
+    "commit": "51a990faa26ade5586a4934ac9673c98d8893326"
   },
   "dependencies": [
     {
       "name": "@img/sharp-wasm32",
-      "version": "0.35.3",
-      "url": "https://registry.npmjs.org/@img/sharp-wasm32/-/sharp-wasm32-0.35.3.tgz",
-      "sha256": "fcab5cbbbf24ce63840c273e2da0214147f68e478bfa899b1a06db6d65eb86e0",
-      "integrity": "sha512-cZ0XkcYGpHZkqW6iCkqTcmUC0CD9DhD5d/qeZlZkfRBn6GnHniZXLUo5+9xw8Iv76YE6LQFN9YNBlKREcCG76w==",
+      "version": "0.35.5",
+      "url": "https://registry.npmjs.org/@img/sharp-wasm32/-/sharp-wasm32-0.35.5.tgz",
+      "sha256": "c68abdf53e1ad2d7b27b53385a3862e16d4bde02ce6d121892ee36f0bfe5bb38",
+      "integrity": "sha512-Ptsga1su4tQx+LLF1ECS9U6nz5kmrXKo6XVbtR48Ke3ZRxxgaWBu7IDtEe1quo8hiupwm6WFqxVlXaSf7IINGQ==",
       "license": "Apache-2.0 AND LGPL-3.0-or-later AND MIT",
-      "archive": "tpr/npm/img-sharp-wasm32-0.35.3.tgz",
+      "archive": "tpr/npm/img-sharp-wasm32-0.35.5.tgz",
       "modifications": "none"
     },
     {
@@ -63,6 +63,68 @@
       "integrity": "sha512-Y7/KDsb8LjooZpwaqGyulO6DQlksgCncchHGk+sZIY4SBvUocMBEFH5Ur1fI4dV+Jvl0w6cjvucaIi40puRioA==",
       "license": "ISC",
       "archive": "tpr/npm/semver-7.8.5.tgz",
+      "modifications": "none"
+    }
+  ],
+  "test_dependencies": [
+    {
+      "name": "exif-reader", "version": "2.0.3",
+      "url": "https://registry.npmjs.org/exif-reader/-/exif-reader-2.0.3.tgz",
+      "sha256": "0ebbe7c2637e4166509eda1c941d522efd62ed012e502276514866e1953a3e12",
+      "integrity": "sha512-zFbQvguwT9JkqyYhR7pjE1Yn8SagwaGLNRU0Oh14xFa1paSf5Gzxn4gxgk0XhnudI0UIqU+HgnBX93+nva592A==",
+      "license": "MIT", "archive": "tpr/test/exif-reader-2.0.3.tgz", "modifications": "none"
+    },
+    {
+      "name": "icc", "version": "4.0.0",
+      "url": "https://registry.npmjs.org/icc/-/icc-4.0.0.tgz",
+      "sha256": "817bb00fb5b4c319c6fdb886ced87a8ad8e8354703180a1c2852f9faa662b342",
+      "integrity": "sha512-gtkfKMx/NzH2xWBz2LQ9PJgEnuQZSemzb+UVug5ZeJIpXv/rYKNcqPx+wMvvNnKufG6JeFR8QId6TwneSKsuFQ==",
+      "license": "Apache-2.0", "archive": "tpr/test/icc-4.0.0.tgz", "modifications": "none"
+    },
+    {
+      "name": "yauzl", "version": "3.4.0",
+      "url": "https://registry.npmjs.org/yauzl/-/yauzl-3.4.0.tgz",
+      "sha256": "ec962fa3205d4be5849f0fc3bebd0492b0abe8acf402656fd80490531fa8ba88",
+      "integrity": "sha512-jIH9yLR9wqr0wOS0TpBvo/g/2UgZH5qePVbjgRliiF0BYvOZyaBknKsF+x9Iht0O6sqgnB93rCICdOZFecJuDw==",
+      "license": "MIT", "archive": "tpr/test/yauzl-3.4.0.tgz", "modifications": "none"
+    },
+    {
+      "name": "pend", "version": "1.2.0",
+      "url": "https://registry.npmjs.org/pend/-/pend-1.2.0.tgz",
+      "sha256": "a12f279b25a9df710b52a9892bad00bdeeb862a9b5d1e4f4db77131129436d7f",
+      "integrity": "sha512-F3asv42UuXchdzt+xXqfW1OGlVBe+mxa2mqI0pg5yAHZPvFmY3Y6drSf/GQ1A86WgWEN9Kzh/WrgKa6iGcHXLg==",
+      "license": "MIT", "archive": "tpr/test/pend-1.2.0.tgz", "modifications": "none"
+    }
+  ],
+  "license_files": [
+    {
+      "archive": "tpr/licenses/LGPL-3.0.txt",
+      "url": "https://www.gnu.org/licenses/lgpl-3.0.txt",
+      "sha256": "e3a994d82e644b03a792a930f574002658412f62407f5fee083f2555c5f23118",
+      "license": "LGPL-3.0-or-later"
+    },
+    {
+      "archive": "tpr/licenses/GPL-3.0.txt",
+      "url": "https://www.gnu.org/licenses/gpl-3.0.txt",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "license": "GPL-3.0-or-later"
+    },
+    {
+      "archive": "tpr/licenses/WASM-THIRD-PARTY-NOTICES.md",
+      "url": "https://github.com/lovell/sharp-libvips/blob/ebb95f8add54eee8bed840e3fb587e4cbec857d7/npm/dev-wasm32/THIRD-PARTY-NOTICES.md",
+      "sha256": "2cf12762fdcdcb6f64aeaaf39fcc640adce9b94c283d532a5a75b3a062b39219",
+      "license": "upstream notices, unmodified"
+    }
+  ],
+  "provenance": [
+    {
+      "name": "sharp-libvips build recipes and notices",
+      "version": "1.3.4",
+      "commit": "ebb95f8add54eee8bed840e3fb587e4cbec857d7",
+      "url": "https://codeload.github.com/lovell/sharp-libvips/tar.gz/ebb95f8add54eee8bed840e3fb587e4cbec857d7",
+      "sha256": "65fdb633c2d97626352a3771b7a0ce30b6a89af03d2a1238491c8b068e6b8dad",
+      "license": "Apache-2.0",
+      "archive": "tpr/sources/sharp-libvips-1.3.4-source.tar.gz",
       "modifications": "none"
     }
   ]
